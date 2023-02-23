@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
+
+use Carbon\Carbon;
+use Str;
+
+
 class pagesController extends Controller
 {
     public function returnForm () {
@@ -31,7 +36,10 @@ class pagesController extends Controller
 
     public function upload (Request $request) {
 
-        $folder = date('Y-m-d'); // Generate folder name using current date
+        $now = Carbon::now();
+        $d = $now->format('Y-m-d');
+        $folder = 'SCE_'.$d; // SCE_orderId_2023-02-23_5_images
+
         $dir = 'public/orders/'.$folder.'/';
         $file = $request->file('file');
 
@@ -55,5 +63,13 @@ class pagesController extends Controller
         $filename = $file->getClientOriginalName();
         $file->move('public/img', $filename);
         return "OK";
+    }
+
+    public function demo_folder_name () {
+        $now = Carbon::now();
+        $d = $now->format('Y-m-d');
+        $r = Str::random(32);
+        $result = 'SCE_'.$d.'_'.$r;
+        return $result;
     }
 }

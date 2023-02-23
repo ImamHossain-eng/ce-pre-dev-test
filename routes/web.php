@@ -25,3 +25,5 @@ Route::post('/upload', [pagesController::class, 'upload']);
 
 Route::get('/test_upload', [pagesController::class, 'getForm']);
 Route::post('/test_upload', [pagesController::class, 'testUpload']);
+
+Route::get('/demo', [pagesController::class, 'demo_folder_name']);

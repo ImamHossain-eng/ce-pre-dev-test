@@ -19,12 +19,16 @@
     </head>
     
     <div class="conteiner p-4">
-        <form action="/upload" method="POST" enctype="multipart/form-data">
+        {{-- <form action="/upload" method="POST" enctype="multipart/form-data">
             @csrf 
             <div class="dropzone" id="myDrop"></div>
 
             <input type="submit" class="btn btn-primary" value="Save">
 
+        </form> --}}
+
+        <form action="/upload" class="dropzone" id="my-dropzone">
+            @csrf
         </form>
         {{-- <form action="/upload" class="dropzone" method="POST" enctype="multipart/form-data">
             @csrf
@@ -39,15 +43,23 @@
 
     <script>
         // Dropzone has been added as a global variable.
-        Dropzone.autoDiscover = false;
-        const dropzone = new Dropzone('#myDrop', {
-             url: "/upload",
-             parallelUploads: 10,
-             method: 'post',
-             enctype: 'multipart/form-data',
-             headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-             }
-            });
+        // Dropzone.autoDiscover = false;
+        // const dropzone = new Dropzone('#myDrop', {
+        //      url: "/upload",
+        //      parallelUploads: 10,
+        //      method: 'post',
+        //      enctype: 'multipart/form-data',
+        //      headers: {
+        //         'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        //      }
+        //     });
+
+        Dropzone.options.myDropzone = {
+            url: '/upload',
+            paramName: 'file',
+            parallelUploads: 100, // Allow up to 10 files to be uploaded at once
+            dictDefaultMessage: 'Drop files here or click to upload',
+        };
+
     </script>
 @endsection
