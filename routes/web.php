@@ -22,7 +22,7 @@ Route::get('/', function () {
 Route::get('/upload', [pagesController::class, 'returnForm']);
 Route::post('/upload', [pagesController::class, 'upload']);
 // Route::post('/upload', [pagesController::class, 'upload']);
-Route::post('/remove_file', [pagesController::class, 'removeFile']);
+Route::post('/remove_file', [pagesController::class, 'removeFile'])->name('remove_file');
 
 Route::get('/test_upload', [pagesController::class, 'getForm']);
 Route::post('/test_upload', [pagesController::class, 'testUpload']);

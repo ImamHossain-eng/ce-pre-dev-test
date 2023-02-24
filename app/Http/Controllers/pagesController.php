@@ -60,17 +60,21 @@ class pagesController extends Controller
     //remove file
     public function removeFile (Request $request) {
 
-        $fileName = $request->get('file_name');
+        $fileName = $request->filename;
 
         // $filePath = public_path('orders/'.Carbon::now()->format('Y-m-d').'/'.$fileName);
 
         if($fileName) {
-            File::delete(public_path('/storage/orders/'.Carbon::now()->format('Y-m-d').'/'.$fileName));
+            // File::delete(public_path('/storage/orders/'.Carbon::now()->format('Y-m-d').'/'.$fileName));
             // File::delete($filePath);
             // Storage::delete($filePath);
+            File::delete('public/orders/'.Carbon::now()->format('Y-m-d').'/'. $fileName);
         } 
 
-        return response()->json(['status' => 'success']);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'File has been successfulkly removed.'
+        ]);
     }
 
     public function getForm() {

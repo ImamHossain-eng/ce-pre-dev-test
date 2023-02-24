@@ -74,10 +74,26 @@
             paramName: 'file',
             parallelUploads: 100, // Allow up to 10 files to be uploaded at once
             dictDefaultMessage: 'Drag your photos here to start uploading',
-            // addRemoveLinks: true,
+            addRemoveLinks: true,
             acceptedFiles: 'image/*',
-            
             //other option
+            init: function() {
+                this.on("removedfile", function(file) {
+                    // Send an Ajax request to your server-side controller to delete the file
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('remove_file') }}",
+                        data: {filename: file.name, _token: "{{ csrf_token() }}" },
+                        success: function (data) {
+                            console.log("File has been successfully removed from server!");
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+                });
+            }
+            
         };
 
     </script>
