@@ -39,8 +39,16 @@ class pagesController extends Controller
         // ]);
     // }
 
+    // public function backupRemoveFile () {
+    //     // $fileName = $request->filename;
+
+    //     // if ($fileName) {
+    //     //     File::delete(storage_path('app/public/orders/'.Carbon::now()->format('Y-m-d').'/'. $fileName));
+    //     // }
+    // }
+
     public function upload (Request $request) {
-        $folder = Carbon::now()->format('Y-m-d');
+        $folder = 'SCE_'.Carbon::now()->format('Y-m-d');
         $dir = 'public/orders/'.$folder.'/';
         $file = $request->file('file');
 
@@ -62,14 +70,18 @@ class pagesController extends Controller
 
         $fileName = $request->filename;
 
+        if ($fileName) {
+            File::delete(storage_path('app/public/orders/SCE_'.Carbon::now()->format('Y-m-d').'/'. $fileName));
+        }
+
         // $filePath = public_path('orders/'.Carbon::now()->format('Y-m-d').'/'.$fileName);
 
-        if($fileName) {
-            // File::delete(public_path('/storage/orders/'.Carbon::now()->format('Y-m-d').'/'.$fileName));
-            // File::delete($filePath);
-            // Storage::delete($filePath);
-            File::delete('public/orders/'.Carbon::now()->format('Y-m-d').'/'. $fileName);
-        } 
+        // if($fileName) {
+        //     // File::delete(public_path('/storage/orders/'.Carbon::now()->format('Y-m-d').'/'.$fileName));
+        //     // File::delete($filePath);
+        //     // Storage::delete($filePath);
+        //     File::delete('public/orders/'.Carbon::now()->format('Y-m-d').'/'. $fileName);
+        // } 
 
         return response()->json([
             'status' => 'success',

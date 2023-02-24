@@ -14,9 +14,11 @@ use App\Http\Controllers\pagesController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::redirect('/', '/upload');
 
 
 Route::get('/upload', [pagesController::class, 'returnForm']);

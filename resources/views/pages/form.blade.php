@@ -42,7 +42,7 @@
                 <i class="fas fa-cloud-upload-alt"></i> 
                 Drag your photos here to start uploading
                 <hr>
-                <button class="btn btn-primary w-25">Browse File</button>
+                <button type="button" class="btn btn-primary w-25">Browse File</button>
             </div>
         </form>
         {{-- <form action="/upload" class="dropzone" method="POST" enctype="multipart/form-data">
