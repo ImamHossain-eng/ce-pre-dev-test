@@ -44,7 +44,6 @@
                 <hr>
                 <button class="btn btn-primary w-25">Browse File</button>
             </div>
-            
         </form>
         {{-- <form action="/upload" class="dropzone" method="POST" enctype="multipart/form-data">
             @csrf
@@ -75,8 +74,10 @@
             paramName: 'file',
             parallelUploads: 100, // Allow up to 10 files to be uploaded at once
             dictDefaultMessage: 'Drag your photos here to start uploading',
-            addRemoveLinks: true,
-            acceptedFiles: 'image/*'   
+            // addRemoveLinks: true,
+            acceptedFiles: 'image/*',
+            
+            //other option
         };
 
     </script>
