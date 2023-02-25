@@ -81,7 +81,6 @@
             dictDefaultMessage: 'Drag your photos here to start uploading',
             addRemoveLinks: true,
             acceptedFiles: 'image/*',
-            maxFiles: 200,
             //other option
 
             
@@ -90,8 +89,6 @@
   
                 var uploadedFiles = []
 
-                
-
                 //function added files -- check if the file already exists 
                 this.on("addedfile", function(file) {
 
@@ -99,8 +96,6 @@
                     var existingFile = uploadedFiles.find(function(existing) {
                         return existing.name === file.name && existing.size === file.size;
                     });
-
-                    
 
                     if (existingFile) {
                         //show a confirmation dialog to replace the existing file or cancel 
@@ -111,13 +106,6 @@
                             uploadedFiles.push(file)
 
                         } 
-                        else {
-                            //remove existing file from dropzone 
-                            // myDropzone.removeFile(existingFile)
-                            // //add the new file to the uploadedFiles array 
-                            // uploadedFiles.push(file)    
-                            file.previewElement.remove();                        
-                        }
                         // else {
                         //     //do nothing
                         //     // remove existing file from dropzone 
@@ -131,15 +119,10 @@
                         //add the new file to the uploadedFiles array
                         uploadedFiles.push(file)
                     }
-
-                    var count = myDropzone.getAcceptedFiles().length;
-                    console.log("Number of files: " + count);
-
                 });
 
                 //function remove file -- delete files from database
                 this.on("removedfile", function (file) {
-
                     // Send an Ajax request to your server-side controller to delete the file
                     axios.post('/remove_file', {
                         filename: file.name,
@@ -175,11 +158,9 @@
             //     }
             // }
 
-           
+            
             
     };
-
-    
 
     </script>
 @endsection

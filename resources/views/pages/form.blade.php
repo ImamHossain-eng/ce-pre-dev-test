@@ -2,27 +2,28 @@
 
 @section('content')
     <head>
-        <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+        <script src="https://unpkg.com/dropzone@4/dist/min/dropzone.min.js"></script>
 
         <link
         rel="stylesheet"
-        href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css"
+        href="https://unpkg.com/dropzone@4/dist/min/dropzone.min.css"
         type="text/css"
         />
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <style>
-            .my-dropzone {
-                height: 30em;
-                width: 30em;
-                border: 2px solid #212121;
-            }
-
+            
             .dropzone i, .dropzone img {
                 display: block;
                 margin: 0 auto;
                 width: 60px;
                 font-size: 2em;
+            }
+
+            .dropzone .dz-remove {
+                background: #ff0000;
+                color: #EFEFEF;
+                text-decoration: none;
             }
         </style>
     </head>
@@ -56,6 +57,7 @@
 
     </div>
 
+
     <script>
         // Dropzone has been added as a global variable.
         // Dropzone.autoDiscover = false;
@@ -69,6 +71,9 @@
         //      }
         //     });
 
+
+
+
         Dropzone.options.myDropzone = {
             url: '/upload',
             paramName: 'file',
@@ -76,25 +81,105 @@
             dictDefaultMessage: 'Drag your photos here to start uploading',
             addRemoveLinks: true,
             acceptedFiles: 'image/*',
+            maxFiles: 200,
             //other option
-            init: function() {
-                this.on("removedfile", function(file) {
-                    // Send an Ajax request to your server-side controller to delete the file
-                    $.ajax({
-                        type: "POST",
-                        url: "{{ route('remove_file') }}",
-                        data: {filename: file.name, _token: "{{ csrf_token() }}" },
-                        success: function (data) {
-                            console.log("File has been successfully removed from server!");
-                        },
-                        error: function (xhr, status, error) {
-                            console.error(xhr.responseText);
-                        }
-                    });
-                });
-            }
+
             
-        };
+            init: function() {
+                var myDropzone = this 
+  
+                var uploadedFiles = []
+
+                
+
+                //function added files -- check if the file already exists 
+                this.on("addedfile", function(file) {
+
+                    //check if the file with the same name has already been uploaded 
+                    var existingFile = uploadedFiles.find(function(existing) {
+                        return existing.name === file.name && existing.size === file.size;
+                    });
+
+                    
+
+                    if (existingFile) {
+                        //show a confirmation dialog to replace the existing file or cancel 
+                        if (confirm("File with the same name already exists. Do you want to replace it?")) {
+                            //remove existing file from dropzone 
+                            myDropzone.removeFile(existingFile)
+                            //add the new file to the uploadedFiles array 
+                            uploadedFiles.push(file)
+
+                        } 
+                        else {
+                            //remove existing file from dropzone 
+                            // myDropzone.removeFile(existingFile)
+                            // //add the new file to the uploadedFiles array 
+                            // uploadedFiles.push(file)    
+                            file.previewElement.remove();                        
+                        }
+                        // else {
+                        //     //do nothing
+                        //     // remove existing file from dropzone 
+                        //     // myDropzone.removeFile(existingFile)
+                        //     // //add the new file to the uploadedFiles array 
+                        //     // uploadedFiles.push(file)
+                        //     // this.removeFile(file)
+                        // }
+                        
+                    } else {
+                        //add the new file to the uploadedFiles array
+                        uploadedFiles.push(file)
+                    }
+
+                    var count = myDropzone.getAcceptedFiles().length;
+                    console.log("Number of files: " + count);
+
+                });
+
+                //function remove file -- delete files from database
+                this.on("removedfile", function (file) {
+
+                    // Send an Ajax request to your server-side controller to delete the file
+                    axios.post('/remove_file', {
+                        filename: file.name,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }, )
+                    .then((response) => {
+                        console.log(response)
+                    })
+                    .catch((error) => {
+                        console.log("Error: ", error)
+                    })
+                });
+
+              
+                
+
+                
+            }, 
+            // accept: function(file, done) {
+            //     // Check if the file with the same name has already been uploaded
+            //     var existingFile = uploadedFiles.find(function(existing) {
+            //     return existing.name === file.name && existing.size === file.size;
+            //     });
+
+            //     if (existingFile) {
+            //         // Reject the file and show an error message
+            //         done("File with same name already exists.");
+            //     } else {
+            //         // Accept the file
+            //         done();
+            //     }
+            // }
+
+           
+            
+    };
+
+    
 
     </script>
 @endsection
