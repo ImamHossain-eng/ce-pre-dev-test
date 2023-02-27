@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\File;
 
 use Carbon\Carbon;
 use Str;
-// use File;
+use ZipArchive;
 
 
 class pagesController extends Controller
@@ -106,5 +106,37 @@ class pagesController extends Controller
         $r = Str::random(32);
         $result = 'SCE_'.$d.'_'.$r;
         return $result;
+    }
+
+    public function demo_zip () {
+        $folderPath = storage_path('app/public/folderToZip');
+        $zipFilePath = storage_path('app/public/output/zipFiles.zip');
+        $result = $this->createZipFile($folderPath, $zipFilePath);
+        if ($result) {
+            return "OK";
+        } else {
+            // An error occurred
+            return "Not OK";
+        }
+    }
+
+    private function createZipFile ($folderPath, $zipFilePath) {
+        $zip = new ZipArchive;
+        if ($zip->open($zipFilePath, ZipArchive::CREATE) === TRUE) {
+            $files = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($folderPath)
+            );
+            foreach ($files as $file) {
+                if (!$file->isDir()) {
+                    $filePath = $file->getRealPath();
+                    $relativePath = substr($filePath, strlen($folderPath) + 1);
+                    $zip->addFile($filePath, $relativePath);
+                }
+            }
+            $zip->close();
+            return true;
+        } else {
+            return false;
+        }
     }
 }

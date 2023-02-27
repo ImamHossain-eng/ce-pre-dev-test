@@ -45,6 +45,7 @@
                 <hr>
                 <button type="button" class="btn btn-primary w-25">Browse File</button>
             </div>
+
         </form>
         {{-- <form action="/upload" class="dropzone" method="POST" enctype="multipart/form-data">
             @csrf
@@ -80,7 +81,8 @@
             parallelUploads: 100, // Allow up to 10 files to be uploaded at once
             dictDefaultMessage: 'Drag your photos here to start uploading',
             addRemoveLinks: true,
-            acceptedFiles: 'image/*',
+            acceptedFiles: 'image/*,.pdf,.doc,.docx,.txt',
+            maxFiles: 200,
             //other option
 
             
@@ -88,6 +90,8 @@
                 var myDropzone = this 
   
                 var uploadedFiles = []
+
+                
 
                 //function added files -- check if the file already exists 
                 this.on("addedfile", function(file) {
@@ -97,6 +101,9 @@
                         return existing.name === file.name && existing.size === file.size;
                     });
 
+                    // var count = myDropzone.getAcceptedFiles().length;
+                    
+
                     if (existingFile) {
                         //show a confirmation dialog to replace the existing file or cancel 
                         if (confirm("File with the same name already exists. Do you want to replace it?")) {
@@ -105,7 +112,18 @@
                             //add the new file to the uploadedFiles array 
                             uploadedFiles.push(file)
 
+                            // count = count - 1;
+
                         } 
+                        else {
+                            //remove existing file from dropzone 
+                            // myDropzone.removeFile(existingFile)
+                            // //add the new file to the uploadedFiles array 
+                            // uploadedFiles.push(file)    
+                            file.previewElement.remove();     
+                            // count = count - 1;
+
+                        }
                         // else {
                         //     //do nothing
                         //     // remove existing file from dropzone 
@@ -114,15 +132,21 @@
                         //     // uploadedFiles.push(file)
                         //     // this.removeFile(file)
                         // }
+
+                        // count = count - 1;
                         
                     } else {
                         //add the new file to the uploadedFiles array
                         uploadedFiles.push(file)
                     }
+
+                    // console.log("Number of files: " + count);
+
                 });
 
                 //function remove file -- delete files from database
                 this.on("removedfile", function (file) {
+
                     // Send an Ajax request to your server-side controller to delete the file
                     axios.post('/remove_file', {
                         filename: file.name,
@@ -136,31 +160,13 @@
                     .catch((error) => {
                         console.log("Error: ", error)
                     })
-                });
-
-              
-                
-
-                
+                });  
             }, 
-            // accept: function(file, done) {
-            //     // Check if the file with the same name has already been uploaded
-            //     var existingFile = uploadedFiles.find(function(existing) {
-            //     return existing.name === file.name && existing.size === file.size;
-            //     });
-
-            //     if (existingFile) {
-            //         // Reject the file and show an error message
-            //         done("File with same name already exists.");
-            //     } else {
-            //         // Accept the file
-            //         done();
-            //     }
-            // }
-
-            
+           
             
     };
+
+    
 
     </script>
 @endsection

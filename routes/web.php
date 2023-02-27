@@ -29,4 +29,5 @@ Route::post('/remove_file', [pagesController::class, 'removeFile'])->name('remov
 Route::get('/test_upload', [pagesController::class, 'getForm']);
 Route::post('/test_upload', [pagesController::class, 'testUpload']);
 
-Route::get('/demo', [pagesController::class, 'demo_folder_name']);
+// Route::get('/demo', [pagesController::class, 'demo_folder_name']);
+Route::get('/demo_zip', [pagesController::class, 'demo_zip']);

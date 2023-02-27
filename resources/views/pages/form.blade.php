@@ -45,6 +45,7 @@
                 <hr>
                 <button type="button" class="btn btn-primary w-25">Browse File</button>
             </div>
+
         </form>
         {{-- <form action="/upload" class="dropzone" method="POST" enctype="multipart/form-data">
             @csrf
@@ -59,38 +60,28 @@
 
 
     <script>
-        // Dropzone has been added as a global variable.
-        // Dropzone.autoDiscover = false;
-        // const dropzone = new Dropzone('#myDrop', {
-        //      url: "/upload",
-        //      parallelUploads: 10,
-        //      method: 'post',
-        //      enctype: 'multipart/form-data',
-        //      headers: {
-        //         'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        //      }
-        //     });
+     
 
+    
 
 
 
         Dropzone.options.myDropzone = {
-            url: '/upload',
+            //Main Options
+            // url: '/upload',
             paramName: 'file',
             parallelUploads: 100, // Allow up to 10 files to be uploaded at once
             dictDefaultMessage: 'Drag your photos here to start uploading',
             addRemoveLinks: true,
-            acceptedFiles: 'image/*',
-            maxFiles: 200,
+            acceptedFiles: 'image/*,.pdf,.doc,.docx,.txt',
+            maxFiles: 100,
+            // maxFilesize: 256,
+
             //other option
-
-            
             init: function() {
+                //States
                 var myDropzone = this 
-  
                 var uploadedFiles = []
-
-                
 
                 //function added files -- check if the file already exists 
                 this.on("addedfile", function(file) {
@@ -98,9 +89,7 @@
                     //check if the file with the same name has already been uploaded 
                     var existingFile = uploadedFiles.find(function(existing) {
                         return existing.name === file.name && existing.size === file.size;
-                    });
-
-                    
+                    });                    
 
                     if (existingFile) {
                         //show a confirmation dialog to replace the existing file or cancel 
@@ -112,74 +101,32 @@
 
                         } 
                         else {
-                            //remove existing file from dropzone 
-                            // myDropzone.removeFile(existingFile)
-                            // //add the new file to the uploadedFiles array 
-                            // uploadedFiles.push(file)    
-                            file.previewElement.remove();                        
+                            //remove existing file from dropzone element   
+                            file.previewElement.remove();     
                         }
-                        // else {
-                        //     //do nothing
-                        //     // remove existing file from dropzone 
-                        //     // myDropzone.removeFile(existingFile)
-                        //     // //add the new file to the uploadedFiles array 
-                        //     // uploadedFiles.push(file)
-                        //     // this.removeFile(file)
-                        // }
-                        
                     } else {
                         //add the new file to the uploadedFiles array
                         uploadedFiles.push(file)
                     }
-
-                    var count = myDropzone.getAcceptedFiles().length;
-                    console.log("Number of files: " + count);
-
                 });
 
                 //function remove file -- delete files from database
                 this.on("removedfile", function (file) {
-
                     // Send an Ajax request to your server-side controller to delete the file
                     axios.post('/remove_file', {
                         filename: file.name,
                         headers: {
                             'Content-Type': 'application/json'
                         }
-                    }, )
+                    })
                     .then((response) => {
                         console.log(response)
                     })
                     .catch((error) => {
                         console.log("Error: ", error)
                     })
-                });
-
-              
-                
-
-                
-            }, 
-            // accept: function(file, done) {
-            //     // Check if the file with the same name has already been uploaded
-            //     var existingFile = uploadedFiles.find(function(existing) {
-            //     return existing.name === file.name && existing.size === file.size;
-            //     });
-
-            //     if (existingFile) {
-            //         // Reject the file and show an error message
-            //         done("File with same name already exists.");
-            //     } else {
-            //         // Accept the file
-            //         done();
-            //     }
-            // }
-
-           
-            
-    };
-
-    
-
+                });  
+            }
+        }
     </script>
 @endsection
