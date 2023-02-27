@@ -31,3 +31,4 @@ Route::post('/test_upload', [pagesController::class, 'testUpload']);
 
 // Route::get('/demo', [pagesController::class, 'demo_folder_name']);
 Route::get('/demo_zip', [pagesController::class, 'demo_zip']);
+Route::get('/make_zip', [pagesController::class, 'make_zip']);

@@ -20,6 +20,7 @@
                 font-size: 2em;
             }
 
+
             .dropzone .dz-remove {
                 background: #ff0000;
                 color: #EFEFEF;
@@ -39,6 +40,10 @@
 
         <form action="/upload" class="dropzone" id="my-dropzone" style="background-color: #f8f8f8; font-size: 24px; color: #333;">
             @csrf
+            {{-- <div class="dz-message">
+                <img src="{{asset('img/drag_drop_content.png')}}" style="width: 60%; height: 40vh; border-radius: 15px;" alt="Drag and Drop Content">
+            </div> --}}
+
             <div class="dz-message">
                 <i class="fas fa-cloud-upload-alt"></i> 
                 Drag your photos here to start uploading
@@ -47,25 +52,13 @@
             </div>
 
         </form>
-        {{-- <form action="/upload" class="dropzone" method="POST" enctype="multipart/form-data">
-            @csrf
-        </form> --}}
-            {{-- <input class="my-dropzone" type="file" multiple /> --}}
-            {{-- <div class="my-dropzone" name="file"></div> --}}
-
-
-            {{-- <input type="submit" class="btn btn-primary w-100" value="Save"> --}}
+        
+        <a href="/make_zip" class="btn btn-success  mt-3 w-100" title="Submit your order">Save Images</a>
 
     </div>
 
 
     <script>
-     
-
-    
-
-
-
         Dropzone.options.myDropzone = {
             //Main Options
             // url: '/upload',

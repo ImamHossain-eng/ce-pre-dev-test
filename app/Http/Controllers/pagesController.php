@@ -74,15 +74,6 @@ class pagesController extends Controller
             File::delete(storage_path('app/public/orders/SCE_'.Carbon::now()->format('Y-m-d').'/'. $fileName));
         }
 
-        // $filePath = public_path('orders/'.Carbon::now()->format('Y-m-d').'/'.$fileName);
-
-        // if($fileName) {
-        //     // File::delete(public_path('/storage/orders/'.Carbon::now()->format('Y-m-d').'/'.$fileName));
-        //     // File::delete($filePath);
-        //     // Storage::delete($filePath);
-        //     File::delete('public/orders/'.Carbon::now()->format('Y-m-d').'/'. $fileName);
-        // } 
-
         return response()->json([
             'status' => 'success',
             'message' => 'File has been successfulkly removed.'
@@ -111,6 +102,19 @@ class pagesController extends Controller
     public function demo_zip () {
         $folderPath = storage_path('app/public/folderToZip');
         $zipFilePath = storage_path('app/public/output/zipFiles.zip');
+        $result = $this->createZipFile($folderPath, $zipFilePath);
+        if ($result) {
+            return "OK";
+        } else {
+            // An error occurred
+            return "Not OK";
+        }
+    }
+
+    public function make_zip () {
+        $folderPath = storage_path('app/public/orders/SCE_'.Carbon::now()->format('Y-m-d'));
+        $zipFilePath = storage_path('app/public/approved_orders/zipFiles.zip');
+
         $result = $this->createZipFile($folderPath, $zipFilePath);
         if ($result) {
             return "OK";
